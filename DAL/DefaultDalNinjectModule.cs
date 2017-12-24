@@ -24,6 +24,9 @@ namespace DAL
                 .To<CacheDataRepository>()
                 .NamedLikeFactoryMethod((IRepositoryFactory f) => f.GetCacheDataRepository());
 
+            Bind<IRepositoryFactory>()
+                .ToFactory();
+
 
         }
     }

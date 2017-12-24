@@ -4,7 +4,7 @@ using System.Data.Entity;
 
 namespace DAL.Repositories
 {
-    public class CacheDataRepository : BaseRepository<CaheData>, ICacheDataRepository
+    public class CacheDataRepository : BaseRepository<CacheData>, ICacheDataRepository
     {
         public CacheDataRepository(DbContext dbContext) : base(dbContext)
         {

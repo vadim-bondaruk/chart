@@ -3,7 +3,7 @@ using Infrastructure.Repositories;
 
 namespace DAL.Infrastructure
 {
-    public interface ICacheDataRepository : IRepository<CaheData>
+    public interface ICacheDataRepository : IRepository<CacheData>
     {
     }
 }

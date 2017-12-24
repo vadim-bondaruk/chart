@@ -28,7 +28,7 @@ namespace DAL.Context
 
         public DbSet<Param> Params { get; set; }
 
-        public DbSet<CaheData> CaheData { get; set; }
+        public DbSet<CacheData> CaheData { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

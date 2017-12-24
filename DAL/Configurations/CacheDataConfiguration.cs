@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace DAL.Configurations
 {
-    class CacheDataConfiguration : EntityTypeConfiguration<CaheData>
+    class CacheDataConfiguration : EntityTypeConfiguration<CacheData>
     {
         public CacheDataConfiguration()
         {
