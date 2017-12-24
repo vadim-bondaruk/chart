@@ -8,8 +8,8 @@ namespace DAL.Configurations
     {
         public ParamConfiguration()
         {
-            HasKey(p => p.ParamId);
-            Property(p => p.ParamId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            HasKey(p => p.Id);
+            Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
     }
 }

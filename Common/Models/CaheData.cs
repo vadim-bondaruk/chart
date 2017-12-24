@@ -1,8 +1,9 @@
-﻿namespace Common.Models
+﻿using Infrastructure.Models;
+
+namespace Common.Models
 {
-    public class CaheData
+    public class CaheData : BaseEntity
     {
-        public int CacheDataId { get; set; }
         public int PointX { get; set; }
         public int PointY { get; set; }
 

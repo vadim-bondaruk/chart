@@ -8,8 +8,8 @@ namespace DAL.Configurations
     {
         public CacheDataConfiguration()
         {
-            HasKey(cd => cd.CacheDataId);
-            Property(cd => cd.CacheDataId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            HasKey(cd => cd.Id);
+            Property(cd => cd.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             HasRequired(cd => cd.Param).WithMany(p => p.Points).WillCascadeOnDelete(true);
 
         }

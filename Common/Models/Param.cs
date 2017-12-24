@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace Common.Models
 {
-    public class Param
+    public class Param : BaseEntity
     {
-        public int ParamId { get; set; }
+       
         public double CoefficientA { get; set; }
         public double CoefficientB { get; set; }
         public double CoeffficientC { get; set; }
