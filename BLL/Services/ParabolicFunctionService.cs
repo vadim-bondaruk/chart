@@ -10,7 +10,7 @@ namespace BLL.Services
 {
     public class ParabolicFunctionService : BaseService, IParabolicFunctionService
     {
-        protected ParabolicFunctionService(IRepositoryFactory factory) : base(factory)
+        public ParabolicFunctionService(IRepositoryFactory factory) : base(factory)
         {
         }
 
@@ -26,7 +26,7 @@ namespace BLL.Services
             {
                 CoefficientA = paramModel.CoefficientA,
                 CoefficientB = paramModel.CoefficientB,
-                CoeffficientC = paramModel.CoeffficientC,
+                CoeffficientC = paramModel.CoefficientC,
                 Step = paramModel.Step,
                 RangeFrom = paramModel.RangeFrom,
                 RangeTo = paramModel.RangeTo
@@ -34,20 +34,23 @@ namespace BLL.Services
 
             using (var paramRepository = Factory.GetParamRepository())
             {
+                param.Points = new List<CacheData>();
                 for (double i = param.RangeFrom; i <= param.RangeTo; i+=param.Step)
                 {
+
                     param.Points.Add(new CacheData
                     {
                         PointX = i,
                         PointY = CalculatePointY(param.CoefficientA, param.CoefficientB, param.CoeffficientC, i)
                     });
 
-                    paramRepository.AddOrUpdate(param);
-                    paramRepository.SaveChanges();
                 }
+
+                paramRepository.AddOrUpdate(param);
+                paramRepository.SaveChanges();
             }
 
-            return param.Points.Select(cd => new CacheDataView { X = cd.PointX, Y = cd.PointY }).ToList();
+            return param.Points?.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY })?.ToList();
 
         }
 
@@ -63,7 +66,7 @@ namespace BLL.Services
                 var storedParam = paramRepository.GetAll(p =>
                                         p.CoefficientA == paramModel.CoefficientA &&
                                         p.CoefficientB == paramModel.CoefficientB &&
-                                        p.CoeffficientC == paramModel.CoeffficientC &&
+                                        p.CoeffficientC == paramModel.CoefficientC &&
                                         p.Step == paramModel.Step &&
                                         p.RangeFrom == paramModel.RangeFrom &&
                                         p.RangeTo == paramModel.RangeTo
@@ -76,7 +79,7 @@ namespace BLL.Services
                 }
                 else
                 {
-                    data = storedParam.Points.Select(cd => new CacheDataView { X = cd.PointX, Y = cd.PointY }).ToList();
+                    data = storedParam.Points.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY }).ToList();
                     return true;
                 }
             }

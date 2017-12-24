@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using BLL.Infrastructure;
+using Common.ViewModels;
+using DAL.Repositories;
 
 namespace Chart.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public HomeController(IRepositoryFactory repositoryFactory, IParabolicFunctionService service) : base(repositoryFactory, service)
+        {
+        }
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult GetData(ParamViewModel model)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+           return Json( ParabolicFunctionService.CalculateChart(model));
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
     }
 }

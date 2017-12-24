@@ -15,7 +15,7 @@ namespace BLL.Services
         /// <summary>
         /// The repository factory to access the repositories.
         /// </summary>
-        protected readonly IRepositoryFactory Factory; // <-- StyleCop generates SA1304 error when the name starts with '_' and lower case latter.
+        protected readonly IRepositoryFactory Factory; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseService"/> class.

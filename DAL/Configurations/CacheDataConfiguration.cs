@@ -10,8 +10,8 @@ namespace DAL.Configurations
         {
             HasKey(cd => cd.Id);
             Property(cd => cd.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            HasRequired(cd => cd.Param).WithMany(p => p.Points).WillCascadeOnDelete(true);
-
+            HasRequired(cd => cd.Param).WithMany(p => p.Points).HasForeignKey(cd => cd.ParamId).WillCascadeOnDelete(true);
+            
         }
     }
 }
