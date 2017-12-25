@@ -26,7 +26,7 @@ namespace BLL.Services
             {
                 CoefficientA = paramModel.CoefficientA,
                 CoefficientB = paramModel.CoefficientB,
-                CoeffficientC = paramModel.CoefficientC,
+                CoefficientC = paramModel.CoefficientC,
                 Step = paramModel.Step,
                 RangeFrom = paramModel.RangeFrom,
                 RangeTo = paramModel.RangeTo
@@ -41,7 +41,7 @@ namespace BLL.Services
                     param.Points.Add(new CacheData
                     {
                         PointX = i,
-                        PointY = CalculatePointY(param.CoefficientA, param.CoefficientB, param.CoeffficientC, i)
+                        PointY = CalculatePointY(param.CoefficientA, param.CoefficientB, param.CoefficientC, i)
                     });
 
                 }
@@ -66,7 +66,7 @@ namespace BLL.Services
                 var storedParam = paramRepository.GetAll(p =>
                                         p.CoefficientA == paramModel.CoefficientA &&
                                         p.CoefficientB == paramModel.CoefficientB &&
-                                        p.CoeffficientC == paramModel.CoefficientC &&
+                                        p.CoefficientC == paramModel.CoefficientC &&
                                         p.Step == paramModel.Step &&
                                         p.RangeFrom == paramModel.RangeFrom &&
                                         p.RangeTo == paramModel.RangeTo

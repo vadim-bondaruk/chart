@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using BLL.Infrastructure;
 using Common.ViewModels;
@@ -21,15 +22,26 @@ namespace Chart.Controllers
         [HttpPost]
         public ActionResult GetData(ParamViewModel model)
         {
-            ICollection<CacheDataView> data = null;
-
-            if(ParabolicFunctionService.CheckIfStored(model, out data))
+            if (ModelState.IsValid)
             {
-                return Json(data);
+                ICollection<CacheDataView> data = null;
+
+                if (ParabolicFunctionService.CheckIfStored(model, out data))
+                {
+                    return Json(data);
+                }
+                data = ParabolicFunctionService.CalculateChart(model);
+                return Json(new { data, IsError = false });
             }
 
-           return Json( ParabolicFunctionService.CalculateChart(model));
+            else
+            {
+                var errors = ModelState.Values.Select(v => v.Errors.Select(e => e.ErrorMessage));
+                return Json(new { errors, IsError = true });
+            }
         }
+
+
 
 
     }
