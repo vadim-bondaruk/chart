@@ -7,7 +7,7 @@ namespace Common.Validators
     {
         public ParamValidator()
         {
-            RuleFor(p => p.RangeFrom).LessThan(r => r.RangeTo)
+            RuleFor(p => p.RangeFrom).LessThan(p => p.RangeTo)
                 .WithMessage("RangeFrom must be less than RangeTo");
             RuleFor(p => p.CoefficientA).NotEmpty().WithMessage("CoefficientA can not be empty");
             RuleFor(p => p.CoefficientB).NotEmpty().WithMessage("CoefficientB can not be empty");

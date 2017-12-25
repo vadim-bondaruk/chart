@@ -129,8 +129,8 @@
 
             plotBtn.click(function () {
 
-                let result = validator.form();
-                if (result) {
+                let result = typeof validator === 'undefined' ? true : validator.form();
+                if (result ) {
 
                     $(".validation-summary-errors").empty();
 
