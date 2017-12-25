@@ -70,6 +70,7 @@ namespace BLL.Services
                                         p.Step == paramModel.Step &&
                                         p.RangeFrom == paramModel.RangeFrom &&
                                         p.RangeTo == paramModel.RangeTo
+                                        
                                     )
                                     .FirstOrDefault();
                 if(storedParam == null)
@@ -79,7 +80,11 @@ namespace BLL.Services
                 }
                 else
                 {
-                    data = storedParam.Points.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY }).ToList();
+                    using (var cacheDataRepository = Factory.GetCacheDataRepository())
+                    {
+                        data = cacheDataRepository.GetAll( cd => cd.ParamId == storedParam.Id)?.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY })?.ToList();
+                    }
+
                     return true;
                 }
             }

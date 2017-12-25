@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using BLL.Infrastructure;
 using Common.ViewModels;
 using DAL.Repositories;
@@ -16,8 +18,16 @@ namespace Chart.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult GetData(ParamViewModel model)
         {
+            ICollection<CacheDataView> data = null;
+
+            if(ParabolicFunctionService.CheckIfStored(model, out data))
+            {
+                return Json(data);
+            }
+
            return Json( ParabolicFunctionService.CalculateChart(model));
         }
 
