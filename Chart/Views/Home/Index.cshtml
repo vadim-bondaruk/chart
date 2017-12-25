@@ -1,4 +1,4 @@
-﻿
+﻿@model Common.ViewModels.ParamViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -22,63 +22,67 @@
         <div class="col-lg-8">
             <canvas id="myChart"></canvas>
         </div>
-        <div class="table-responsive col-lg-4">
-            <table>
-                <tr>
-                    <td>Function:</td>
-                    <td>Y=</td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="coefficientA" placeholder="a">
-                    </td>
-                    <td>x^2+</td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="coefficientB" placeholder="b">
-                    </td>
-                    <td>x+</td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="coefficientC" placeholder="c">
-                    </td>
-                </tr>
-                <tr></tr>
-                <tr>
-                    <td>Step:</td>
-                    <td></td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="step" placeholder="step">
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr></tr>
-                <tr>
-                    <td>From:</td>
-                    <td></td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="rangeFrom" placeholder="from">
-                    </td>
-                    <td class="centered">to:</td>
-                    <td>
-                        <input type="number" class="form-control numberInput" id="rangeTo" placeholder="to">
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button type="btn btn-default" class="btn btn-primary" id="plotBtn">Plot</button>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
-            @Html.ValidationSummary()
+        <form id="form">
+            <div class="table-responsive col-lg-4">
+                <table>
+                    <tr>
+                        <td>Function:</td>
+                        <td>Y=</td>
+                        <td>
+                           
+                            @Html.EditorFor(m => m.CoefficientA, new { htmlAttributes = new { @class = "form-control numberInput", id = "coefficientA", placeholder = "a", type = "number" } })
+                </td>
+                <td>x^2+</td>
+                <td>
+                    @Html.EditorFor(m => m.CoefficientB, new { htmlAttributes = new { @class = "form-control numberInput", id = "coefficientB", placeholder = "b", type = "number" } })
+                </td>
+                <td>x+</td>
+                <td>
+                    @Html.EditorFor(m => m.CoefficientC, new { htmlAttributes = new { @class = "form-control numberInput", id = "coefficientC", placeholder = "c", type = "number" } })
+                </td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td>Step:</td>
+                <td></td>
+                <td>
+                    @Html.EditorFor(m => m.Step, new { htmlAttributes = new { @class = "form-control numberInput", id = "step", placeholder = "step", type = "number" } })
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td>From:</td>
+                <td></td>
+                <td>
+                    @Html.EditorFor(m => m.RangeFrom, new { htmlAttributes = new { @class = "form-control numberInput", id = "rangeFrom", placeholder = "from", type = "number" } })
+                </td>
+                <td class="centered">to:</td>
+                <td>
+                    @Html.EditorFor(m => m.RangeTo, new { htmlAttributes = new { @class = "form-control numberInput", id = "rangeTo", placeholder = "to", type = "number" } })
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <button type="button" class="btn btn-primary" id="plotBtn">Plot</button>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+                
+        @Html.ValidationSummary()
         </div>
+        </form>
     </div>
 
     <!-- Modal window   -->
@@ -87,9 +91,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <p></p>
@@ -108,7 +109,7 @@
             var coefficientA = $('#coefficientA');
             var coefficientB = $('#coefficientB');
             var coefficientC = $('#coefficientC');
-
+          
             var step = $("#step");
             var rangeFrom = $("#rangeFrom");
             var rangeTo = $("#rangeTo");
@@ -117,38 +118,52 @@
 
             var plotUrl = '@Url.Action("GetData")';
             var chart;
+
+            let validator = $('#form').validate({
+                submitHandler: function (form) {
+
+                    return false;
+                }
+            });
+
+
             plotBtn.click(function () {
 
-                $.ajax({
-                    url: plotUrl,
-                    type: 'post',
-                    data: {
-                        "coefficientA": coefficientA.val(),
-                        "coefficientB": coefficientB.val(),
-                        "coefficientC": coefficientC.val(),
-                        "step": step.val(),
-                        "rangeFrom": rangeFrom.val(),
-                        "rangeTo": rangeTo.val()
-                    }
-                }).done(function (data) {
-                    if (data) {
+                let result = validator.form();
+                if (result) {
 
-                        if (data.IsError == false) {
-                            if (data.data && data.data.length > 0) {
-                                drawChart(data.data);
-                            }
+                    $(".validation-summary-errors").empty();
+
+                    $.ajax({
+                        url: plotUrl,
+                        type: 'post',
+                        data: {
+                            "coefficientA": coefficientA.val(),
+                            "coefficientB": coefficientB.val(),
+                            "coefficientC": coefficientC.val(),
+                            "step": step.val(),
+                            "rangeFrom": rangeFrom.val(),
+                            "rangeTo": rangeTo.val()
                         }
-                        else {
-                            if (data.errors && data.errors.length > 0) {
+                    }).done(function (data) {
+                        if (data) {
 
-                                showInfo(data.errors);
+                            if (data.IsError == false) {
+                                if (data.data && data.data.length > 0) {
+                                    drawChart(data.data);
+                                }
                             }
-                        }
-                        
-                    }
-                });
+                            else {
+                                if (data.errors && data.errors.length > 0) {
 
-                
+                                    showInfo(data.errors);
+                                }
+                            }
+
+                        }
+                    });
+                }
+               
             });
 
             drawChart(null);

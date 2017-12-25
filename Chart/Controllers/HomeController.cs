@@ -28,7 +28,7 @@ namespace Chart.Controllers
 
                 if (ParabolicFunctionService.CheckIfStored(model, out data))
                 {
-                    return Json(data);
+                    return Json(new { data, IsError = false });
                 }
                 data = ParabolicFunctionService.CalculateChart(model);
                 return Json(new { data, IsError = false });
