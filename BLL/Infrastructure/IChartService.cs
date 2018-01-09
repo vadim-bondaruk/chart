@@ -25,5 +25,13 @@ namespace BLL.Infrastructure
         /// <returns>Points to plot chart</returns>
         ICollection<CacheDataView> CalculateChart(ParamViewModel param);
 
+        /// <summary>
+        /// Calculating points to plot chart in multiple threads
+        /// </summary>
+        /// <param name="param">Function coefficients</param>
+        /// <returns>Points to plot chart</returns>
+        ICollection<CacheDataView> CalculateChartParallel(ParamViewModel param);
+        
+
     }
 }

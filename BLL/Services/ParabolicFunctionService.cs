@@ -5,6 +5,7 @@ using DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -52,6 +53,44 @@ namespace BLL.Services
 
             return param.Points?.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY })?.ToList();
 
+        }
+
+        public ICollection<CacheDataView> CalculateChartParallel(ParamViewModel paramModel)
+        {
+            if (paramModel == null)
+            {
+                throw new ArgumentNullException("param");
+            }
+
+            //TODO: add automapper
+            Param param = new Param
+            {
+                CoefficientA = paramModel.CoefficientA,
+                CoefficientB = paramModel.CoefficientB,
+                CoefficientC = paramModel.CoefficientC,
+                Step = paramModel.Step,
+                RangeFrom = paramModel.RangeFrom,
+                RangeTo = paramModel.RangeTo
+            };
+
+            int elementsCount= (int)((param.RangeTo - param.RangeFrom) / param.Step) + 1;
+
+            var elements = new CacheData[elementsCount];
+
+            Parallel.For(0, elementsCount, i => {
+                var x = param.RangeFrom + param.Step * i;
+                var y = CalculatePointY(param.CoefficientA, param.CoefficientB, param.CoefficientC, x);
+                elements[i] = new CacheData { PointX = x, PointY = y };
+            });
+
+            using (var paramRepository = Factory.GetParamRepository())
+            {
+                param.Points = elements;
+                paramRepository.AddOrUpdate(param);
+                paramRepository.SaveChanges();
+            }
+
+            return elements.Select(cd => new CacheDataView { x = cd.PointX, y = cd.PointY })?.ToList();
         }
 
         public bool CheckIfStored(ParamViewModel paramModel, out ICollection<CacheDataView> data)

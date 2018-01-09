@@ -30,7 +30,7 @@ namespace Chart.Controllers
                 {
                     return Json(new { data, IsError = false });
                 }
-                data = ParabolicFunctionService.CalculateChart(model);
+                data = ParabolicFunctionService.CalculateChartParallel(model);
                 return Json(new { data, IsError = false });
             }
 
